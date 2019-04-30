@@ -285,4 +285,30 @@ public class CrewMember implements Serializable{
 			setActionsRemaining(actionsRemaining - amount);
 		}
 	}
+	public void consume(String itemName, int quantity, Inventory inventory) throws ItemNotFoundException, InsufficientQuantityException, NotConsumableException  {
+		try {
+			InventoryItem toConsume = inventory.consume(itemName, quantity);
+			switch(toConsume.getType()) {
+			case "MedicalItem":
+				MedicalItem medicalItem = (MedicalItem) toConsume;
+				setHealth(health + medicalItem.getHealthIncrease());
+				for(Disease disease:diseases) {
+					if(medicalItem.cures(disease)) {
+						diseases.remove(disease);
+					}
+				}
+				break;
+			case "FoodItem":
+				FoodItem foodItem = (FoodItem) toConsume;
+				setHunger(hunger - foodItem.getHungerDecrease());
+				break;
+			case "ShipPartItem":
+				throw new NotConsumableException();
+			}
+		} catch (ItemNotFoundException e) {
+			throw e;
+		} catch (InsufficientQuantityException e) {
+			throw e;
+		}
+	}
 }

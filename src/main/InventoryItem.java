@@ -88,4 +88,13 @@ public abstract class InventoryItem implements Cloneable, Serializable{
 	public static String[] getItemTypes() {
 		return itemTypes;
 	}
+
+	public void consume(int quantity) throws InsufficientQuantityException{
+		if(this.quantity < quantity) {
+			throw new InsufficientQuantityException();
+		}
+		this.quantity -= quantity;
+	}
+
+	public abstract String getType();
 }

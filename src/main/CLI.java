@@ -8,10 +8,12 @@ import java.util.Scanner;
 
 public class CLI {
 	
+	private static final String GAME_PROPERTIES_FILE = "gameProperties.properties";
+	
 	private Scanner scanner;
-	CLIContext context;
-	GameState gameState;
-	CLIContext lastContext;
+	private CLIContext context;
+	private GameState gameState;
+	private CLIContext lastContext;
 	
 	public CLI(){
 		scanner = new Scanner(System.in);
@@ -36,13 +38,14 @@ public class CLI {
 	
 	public void run(){
 		
-		Properties properties = Utilities.loadPropertiesFile("gameProperties.properties");
+		Properties properties = Utilities.loadPropertiesFile(GAME_PROPERTIES_FILE);
 		String gameName = properties.getProperty("gameName");
 		
 		System.out.println("Welcome to the " + gameName + " command line interface, you will select options by typing their numbers");
 		//Thread.sleep(2000);
 		
 		int intResponse;
+		boolean doubleBreak = false;
 		
 		while(true){
 			switch(context){
@@ -219,7 +222,47 @@ public class CLI {
 			case IN_GAME:
 				switch(gameState.getViewContext()){
 				case CONSUME_MENU:
-					System.out.println("");
+					System.out.println("You have these medical items:");
+					for(MedicalItem medicalItem:gameState.getInventory().getMedicalItems().values()) {
+						System.out.println(medicalItem.getAttributeDescription());
+					}
+					System.out.println("You have these food items:");
+					for(FoodItem foodItem:gameState.getInventory().getFoodItems().values()) {
+						System.out.println(foodItem.getAttributeDescription());
+					}
+					System.out.println("1. Return to Crew Menu");
+					System.out.println("2. Choose a crew member to consume something");
+					intResponse = getInt(1, 2);
+					doubleBreak = false;
+					switch(intResponse) {
+					case 1:
+						gameState.setViewContext(GameStateViewContext.CREW_MENU);
+						doubleBreak = true;
+						break;
+					case 2:
+						System.out.println("Your crew is:");
+						System.out.println(gameState.getCrewStatus());
+						System.out.println("Which crew member should consume something?");
+						String crewMemberName = getCrewMemberWithAtLeastOneActionRemaining();
+						System.out.println("What item should be consumed?");
+						String itemName = getValidInventoryItemName();
+						System.out.println("How many should be consumed?");
+						int quantity = getInt(0, gameState.getInventory().getItems().get(itemName).getQuantity());
+						try {
+							gameState.haveCrewMemberConsumeItem(crewMemberName, itemName, quantity);
+							System.out.println("Crew Member " + crewMemberName + " successfully consumed " + quantity + " " + itemName);
+						} catch (ItemNotFoundException e3) {
+							System.out.println("The requested item to consume was not found.");
+						} catch (InsufficientQuantityException e3) {
+							System.out.println("You do not have enough of that item to consume");
+						} catch (NotConsumableException e3) {
+							System.out.println("This item is not consumable");
+						}
+						break;
+					}
+					if(doubleBreak){
+						break;
+					}
 					break;
 				case CREW_MENU:
 					System.out.println("Crew/Ship Menu Options:");
@@ -330,7 +373,7 @@ public class CLI {
 								System.out.println("1. Yes");
 								System.out.println("2. No");
 								intResponse = getInt(1, 2);
-								boolean doubleBreak = false;
+								doubleBreak = false;
 								switch(intResponse){
 								case 1:
 									gameState.saveAs(desiredSaveName);
@@ -569,5 +612,32 @@ public class CLI {
 			}
 		}
 		//ask for days
+	}
+
+	private String getValidInventoryItemName() {
+		String result = "";
+		while(true) {
+			result = scanner.nextLine();
+			if(!gameState.getInventory().getItems().containsKey(result)) {
+				System.out.println("Could not find that item, try again:");
+			}
+			break;
+		}
+		return result;
+	}
+
+	private String getCrewMemberWithAtLeastOneActionRemaining() {
+		String result = "";
+		while(true) {
+			result = scanner.nextLine();
+			if(!gameState.getCrew().getMembers().containsKey(result)) {
+				System.out.println("Could not find that crew member, try again:");
+			}
+			if(!(gameState.getCrew().getMembers().get(result).getActionsRemaining() >= 1)) {
+				System.out.println("That crew member does not have enough actions, try again:");
+			}
+			break;
+		}
+		return result;
 	}
 }

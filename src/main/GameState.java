@@ -220,4 +220,16 @@ public class GameState implements Serializable{
 	public static GameState loadSave(String saveName) {
 		return (GameState) Utilities.readSerializable(getSaveDirectory(saveName));
 	}
+
+	public void haveCrewMemberConsumeItem(String crewMemberName, String itemName, int quantity) throws ItemNotFoundException, InsufficientQuantityException, NotConsumableException {
+		try {
+			crew.getMembers().get(crewMemberName).consume(itemName, quantity, inventory);
+		} catch (ItemNotFoundException e) {
+			throw e;
+		} catch (InsufficientQuantityException e) {
+			throw e;
+		} catch (NotConsumableException e) {
+			throw e;
+		}
+	}
 }

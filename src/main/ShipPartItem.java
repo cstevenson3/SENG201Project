@@ -10,4 +10,9 @@ public class ShipPartItem extends InventoryItem{
 	public String getAttributeDescription() {
 		return "A ship part";
 	}
+	
+	@Override
+	public String getType() {
+		return "ShipPartItem";
+	}
 }

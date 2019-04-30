@@ -30,7 +30,7 @@ public class FoodItem extends InventoryItem implements Serializable{
 	
 	@Override
 	public String getAttributeDescription() {
-		String result = "This food item decreases hunger by " + hungerDecrease;
+		String result = getName() + " - This food item decreases hunger by " + hungerDecrease;
 		return result;
 	}
 	
@@ -46,5 +46,10 @@ public class FoodItem extends InventoryItem implements Serializable{
 	public static boolean exists(String itemName) {
 		File file = new File(getDirectory(itemName));
 		return file.exists();
+	}
+	
+	@Override
+	public String getType() {
+		return "FoodItem";
 	}
 }

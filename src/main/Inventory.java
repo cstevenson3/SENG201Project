@@ -57,4 +57,42 @@ public class Inventory implements Serializable{
 		}
 		return "nothing";
 	}
+	
+	public HashMap<String, MedicalItem> getMedicalItems() {
+		HashMap<String, MedicalItem> result = new HashMap<String, MedicalItem>();
+		for(InventoryItem item:items.values()) {
+			if(item instanceof MedicalItem) {
+				result.put(item.getName(), (MedicalItem) item);
+			}
+		}
+		return result;
+	}
+	
+	public HashMap<String, FoodItem> getFoodItems() {
+		HashMap<String, FoodItem> result = new HashMap<String, FoodItem>();
+		for(InventoryItem item:items.values()) {
+			if(item instanceof FoodItem) {
+				result.put(item.getName(), (FoodItem) item);
+			}
+		}
+		return result;
+	}
+	
+	public HashMap<String, InventoryItem> getItems() {
+		return items;
+	}
+
+	public InventoryItem consume(String itemName, int quantity) throws ItemNotFoundException, InsufficientQuantityException{
+		if(!items.containsKey(itemName)) {
+			throw new ItemNotFoundException();
+		}
+		try{
+			items.get(itemName).consume(quantity);
+			InventoryItem newItem = items.get(itemName).clone();
+			newItem.setQuantity(quantity);
+			return newItem;
+		}catch (InsufficientQuantityException e) {
+			throw e;
+		}
+	}
 }

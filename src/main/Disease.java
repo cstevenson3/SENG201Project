@@ -26,11 +26,15 @@ public class Disease implements Serializable{
 	 * @param propertiesFile The file containing its properties, in Properties format
 	 */
 	public Disease(String propertiesFile){
-		Properties properties = Utilities.loadPropertiesFile(DISEASE_DIRECTORY + propertiesFile);
+		Properties properties = Utilities.loadPropertiesFile(getDirectory(propertiesFile));
 		setName(properties.getProperty("name"));
 		setDailyHealthDecrease(Integer.parseInt(properties.getProperty("dailyHealthDecrease")));
 	}
 	
+	private static String getDirectory(String propertiesFile) {
+		return DISEASE_DIRECTORY + propertiesFile + ".properties";
+	}
+
 	/**
 	 * Creates a default disease
 	 */

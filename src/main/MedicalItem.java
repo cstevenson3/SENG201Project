@@ -50,7 +50,7 @@ public class MedicalItem extends InventoryItem implements Serializable, Cloneabl
 	
 	@Override
 	public String getAttributeDescription() {
-		String result = "This medical item increases health by " + healthIncrease + (diseasesCured.size()==0? "":" and cures the following diseases:\n");
+		String result = getName() + " - This medical item increases health by " + healthIncrease + (diseasesCured.size()==0? "":" and cures the following diseases:\n");
 		for(String disease:diseasesCured){
 			result += disease + "\n";
 		}
@@ -65,5 +65,10 @@ public class MedicalItem extends InventoryItem implements Serializable, Cloneabl
 	public static boolean exists(String itemName) {
 		File file = new File(getDirectory(itemName));
 		return file.exists();
+	}
+
+	@Override
+	public String getType() {
+		return "MedicalItem";
 	}
 }
