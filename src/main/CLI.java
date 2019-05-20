@@ -1,18 +1,19 @@
 package main;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Scanner;
 
-public class CLI {
+public class CLI implements Serializable{
 	
 	private static final String GAME_PROPERTIES_FILE = "gameProperties.properties";
 	
-	private Scanner scanner;
+	private transient Scanner scanner;
 	private CLIContext context;
-	private GameState gameState;
+	private transient GameState gameState;
 	private CLIContext lastContext;
 	
 	public CLI(){
@@ -34,6 +35,32 @@ public class CLI {
 				System.out.println("Not a valid number, try again");
 			}
 		}
+	}
+	
+	public void handleMovingToNextDay() {
+		try {
+			gameState.moveToNextDay();
+		} catch (AlienPirateEventException e) {
+			System.out.println("Alien pirates raided the ship and took " + e.getItemRemoved());
+		} catch (OutOfDaysException e) {
+			System.out.println("Out of days, ending game");
+			context = CLIContext.END_GAME;
+		}
+	}
+	
+	public class CLIOutOfActionsListener implements OutOfActionsListener, Serializable{
+
+		@Override
+		public void crewOutOfActions() {
+			System.out.println("All crew actions used today, moving to next day");
+			handleMovingToNextDay();
+		}
+
+		@Override
+		public void crewMemberOutOfActions(CrewMember crewMember) {
+			System.out.println("Crew member " + crewMember.getName() + " has now used up all actions today");
+		}
+		
 	}
 	
 	public void run(){
@@ -85,14 +112,7 @@ public class CLI {
 				
 			
 				System.out.println("How many days should the game last (" + minDays + "-" + maxDays + ")?");
-				int days;
-				while(true){
-					days = Integer.parseInt(scanner.nextLine());
-					if (minDays <= days && days <= maxDays){
-						break;
-					}
-					System.out.println("Invalid number, try again:");
-				}
+				int days = getInt(minDays, maxDays);
 				
 				float piecesPerDay = Float.parseFloat(properties.getProperty("itemsPerDay"));
 				
@@ -112,6 +132,10 @@ public class CLI {
 				HashMap<String, CrewMember> crewMembers = new HashMap<String, CrewMember>();
 				
 				while(true){
+					if(crewMembersAdded >= maxCrew){
+						System.out.println("Crew is full");
+						break;
+					}
 					if(crewMembersAdded >= minCrew){
 						System.out.println("Continue adding members?");
 						System.out.println("1. Yes");
@@ -130,10 +154,6 @@ public class CLI {
 							break;
 						}
 					}
-					if(crewMembersAdded >= maxCrew){
-						System.out.println("Crew is full");
-						break;
-					}
 					System.out.println("Enter a role name:");
 					String role = scanner.nextLine();
 					if(CrewMember.isValidRole(role)){
@@ -146,6 +166,7 @@ public class CLI {
 								System.out.println("Adding crew member " + name + " with role " + role);
 								CrewMember crewMember = new CrewMember(role);
 								crewMember.setName(name);
+								crewMember.addOutOfActionsListener(new CLIOutOfActionsListener());
 								crewMembers.put(name, crewMember);
 								crewMembersAdded += 1;
 								break;
@@ -162,6 +183,7 @@ public class CLI {
 				System.out.println("Starting game");
 				
 				gameState = new GameState(days, piecesRequired, crewMembers, properties);
+				gameState.addCrewOutOfActionsListener(new CLIOutOfActionsListener());
 				gameState.setShipName(shipName);
 				context = CLIContext.IN_GAME;
 				break;
@@ -257,6 +279,8 @@ public class CLI {
 							System.out.println("You do not have enough of that item to consume");
 						} catch (NotConsumableException e3) {
 							System.out.println("This item is not consumable");
+						} catch (OutOfActionsException e) {
+							System.out.println("This crew member is out of actions, did not consume");
 						}
 						break;
 					}
@@ -265,6 +289,7 @@ public class CLI {
 					}
 					break;
 				case CREW_MENU:
+					System.out.println("You are on day " + (gameState.getDaysElapsed() + 1) + " with " + gameState.getPiecesCollected() + " pieces collected.");
 					System.out.println("Crew/Ship Menu Options:");
 					System.out.println("1. View Crew");
 					System.out.println("2. Open pause menu");
@@ -294,14 +319,7 @@ public class CLI {
 						System.out.println(gameState.getShipShieldHealth());
 						break;
 					case 6:
-						try {
-							gameState.moveToNextDay();
-						} catch (AlienPirateEventException e) {
-							System.out.println("Alien pirates raided the ship and took " + e.getItemRemoved());
-						} catch (OutOfDaysException e) {
-							System.out.println("Out of days, ending game");
-							context = CLIContext.END_GAME;
-						}
+						handleMovingToNextDay();
 						break;
 					case 7:
 						gameState.setViewContext(GameStateViewContext.CONSUME_MENU);
@@ -324,7 +342,12 @@ public class CLI {
 								System.out.println("Could not find that crew member, try again:");
 							}
 						}
-						gameState.getCrew().getMembers().get(sleepName).sleep();
+						try {
+							gameState.getCrew().getMembers().get(sleepName).sleep();
+							System.out.println(sleepName + " has slept");
+						} catch (OutOfActionsException e5) {
+							System.out.println("Crew member is out of actions and cannot sleep");
+						}
 						break;
 					case 9:
 						System.out.println("Which crew member should repair the ship shield?");
@@ -344,7 +367,11 @@ public class CLI {
 								System.out.println("Could not find that crew member, try again:");
 							}
 						}
-						gameState.getCrew().getMembers().get(repairName).repair(gameState.getShip());
+						try {
+							gameState.getCrew().getMembers().get(repairName).repair(gameState.getShip());
+						} catch (OutOfActionsException e4) {
+							System.out.println("This crew member is out of actions, ship not repaired");
+						}
 						break;
 					}
 					break;
@@ -430,7 +457,15 @@ public class CLI {
 								System.out.println("Could not find that crew member, try again:");
 							}
 						}
-						InventoryItem itemFound = gameState.searchCurrentPlanet(searchName);
+						InventoryItem itemFound = null;
+						try {
+							itemFound = gameState.searchCurrentPlanet(searchName);
+						} catch (AllPartsFoundException e3) {
+							System.out.println("All parts found");
+							context = CLIContext.END_GAME;
+						} catch (OutOfActionsException e) {
+							System.out.println("This crew member is out of actions, could not search");
+						}
 						if(itemFound == null){
 							System.out.println("Searching this planet found nothing");
 						}else{

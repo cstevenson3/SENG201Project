@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 
+import main.CLI.CLIOutOfActionsListener;
+
 public class GameState implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -23,17 +25,44 @@ public class GameState implements Serializable{
 	private HashMap<String, Planet> planets;
 	
 	private GameStateViewContext viewContext;
-	GameStateViewContext lastViewContext;
+	private GameStateViewContext lastViewContext;
 	
 	private int daysElapsed;
 	private int piecesCollected;
 	
 	private Inventory inventory;
 	
+	private ArrayList<OutOfActionsListener> crewOutOfActionsListeners;
+	
+	
+	public class GameStateOutOfActionsListener implements OutOfActionsListener, Serializable{
+
+		@Override
+		public void crewOutOfActions() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void crewMemberOutOfActions(CrewMember crewMember) {
+			if(crewOutOfActionsToday()) {
+				callAllCrewOutOfActionsListeners();
+			}
+		}
+		
+	}
+	
 	public GameState(int daysToPlay, int piecesRequired, HashMap<String, CrewMember> crewMembers, Properties properties){
 		this.daysToPlay = Utilities.clamp(daysToPlay, 1, Integer.MAX_VALUE);
 		this.piecesRequired = Utilities.clamp(piecesRequired, 1, Integer.MAX_VALUE);
+		
+		
+		for(CrewMember member : crewMembers.values()) {
+			member.addOutOfActionsListener(new GameStateOutOfActionsListener());
+		}
 		this.crew = new Crew(crewMembers);
+		
+		
 		this.ship = new Ship("default");
 		this.alienPirateEventOdds = Float.parseFloat(properties.getProperty("alienPirateEventOdds"));
 		
@@ -67,6 +96,9 @@ public class GameState implements Serializable{
 		
 		viewContext = GameStateViewContext.CREW_MENU;
 		lastViewContext = GameStateViewContext.CREW_MENU;
+		
+		
+		crewOutOfActionsListeners = new ArrayList<OutOfActionsListener>();
 	}
 
 	public static ArrayList<String> getSavedGameNames() {
@@ -204,11 +236,26 @@ public class GameState implements Serializable{
 	public HashMap<String, Planet> getPlanets() {
 		return planets;
 	}
+	
+	public boolean crewOutOfActionsToday() {
+		boolean result = true;
+		for(CrewMember crewMember:crew.getMembers().values()) {
+			if(!crewMember.outOfActionsToday()) {
+				result = false;
+			}
+		}
+		return result;
+	}
 
-	public InventoryItem searchCurrentPlanet(String searchName) {
+	public InventoryItem searchCurrentPlanet(String searchName) throws AllPartsFoundException, OutOfActionsException {
 		InventoryItem itemFound = crew.getMembers().get(searchName).search(planets.get(getPlanet()));
 		if(itemFound!=null){
 			inventory.addItem(itemFound);
+		}
+		if(itemFound.getType() == "ShipPartItem") { //TODO should have classes determine this type string
+			if(getPiecesCollected() >= piecesRequired) {
+				throw new AllPartsFoundException((ShipPartItem) itemFound);
+			}
 		}
 		return itemFound;
 	}
@@ -221,15 +268,17 @@ public class GameState implements Serializable{
 		return (GameState) Utilities.readSerializable(getSaveDirectory(saveName));
 	}
 
-	public void haveCrewMemberConsumeItem(String crewMemberName, String itemName, int quantity) throws ItemNotFoundException, InsufficientQuantityException, NotConsumableException {
-		try {
-			crew.getMembers().get(crewMemberName).consume(itemName, quantity, inventory);
-		} catch (ItemNotFoundException e) {
-			throw e;
-		} catch (InsufficientQuantityException e) {
-			throw e;
-		} catch (NotConsumableException e) {
-			throw e;
+	public void haveCrewMemberConsumeItem(String crewMemberName, String itemName, int quantity) throws ItemNotFoundException, InsufficientQuantityException, NotConsumableException, OutOfActionsException {
+		crew.getMembers().get(crewMemberName).consume(itemName, quantity, inventory);
+	}
+	
+	public void callAllCrewOutOfActionsListeners() {
+		for(OutOfActionsListener listener : crewOutOfActionsListeners) {
+			listener.crewOutOfActions();
 		}
+	}
+
+	public void addCrewOutOfActionsListener(CLIOutOfActionsListener listener) {
+		crewOutOfActionsListeners.add(listener);
 	}
 }

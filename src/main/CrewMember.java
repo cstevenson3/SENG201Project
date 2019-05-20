@@ -42,6 +42,8 @@ public class CrewMember implements Serializable{
 	private ArrayList<Disease> diseases;
 	private float diseaseOdds;
 	
+	private ArrayList<OutOfActionsListener> outOfActionsListeners;
+	
 	public CrewMember(String propertiesFile){
 		Properties properties = Utilities.loadPropertiesFile(getDirectory(propertiesFile));
 		setName(properties.getProperty("name"));
@@ -57,7 +59,7 @@ public class CrewMember implements Serializable{
 		
 		int maxTiredness = Integer.parseInt(properties.getProperty("maxTiredness"));
 		setMaxTiredness(maxTiredness);
-		setTiredness(maxTiredness);
+		setTiredness(0);
 		
 		setTirednessIncreasePerDay(Integer.parseInt(properties.getProperty("tirednessIncreasePerDay")));
 		setTirednessDecreasePerSleep(Integer.parseInt(properties.getProperty("tirednessDecreasePerSleep")));
@@ -71,6 +73,12 @@ public class CrewMember implements Serializable{
 		
 		diseases = new ArrayList<Disease>();
 		diseaseOdds = Float.parseFloat(properties.getProperty("diseaseOdds"));
+		
+		outOfActionsListeners = new ArrayList<OutOfActionsListener>();
+	}
+	
+	public void addOutOfActionsListener(OutOfActionsListener listener) {
+		outOfActionsListeners.add(listener);
 	}
 
 	public boolean canPilot(){
@@ -174,17 +182,18 @@ public class CrewMember implements Serializable{
 		}
 	}
 
-	public boolean repair(Ship ship) {
+	public boolean repair(Ship ship) throws OutOfActionsException {
 		if(actionsRemaining >= 1){
 			ship.increaseShieldHealth(repairSkill);
-			setActionsRemaining(actionsRemaining - 1);
+			useActions(1);
 			return true;
 		}else{
 			return false;
 		}
 	}
 
-	public InventoryItem search(Planet planet) {
+	public InventoryItem search(Planet planet) throws OutOfActionsException {
+		useActions(1);
 		InventoryItem result = null;
 		int searchesDone = 0;
 		while(true){
@@ -268,13 +277,14 @@ public class CrewMember implements Serializable{
 		tirednessIncreasePerDay = Utilities.clamp(value, 0, maxTiredness);
 	}
 
-	public boolean sleep() {
-		if(actionsRemaining >= 1){
-			setTiredness(tiredness - tirednessDecreasePerSleep);
-			setActionsRemaining(actionsRemaining - 1);
-			return true;
-		}else{
-			return false;
+	public void sleep() throws OutOfActionsException {
+		useActions(1);
+		setTiredness(tiredness - tirednessDecreasePerSleep);
+	}
+	
+	public void callAllOutOfActionsListeners() {
+		for(OutOfActionsListener listener : outOfActionsListeners) {
+			listener.crewMemberOutOfActions(this);
 		}
 	}
 	
@@ -283,9 +293,13 @@ public class CrewMember implements Serializable{
 			throw new OutOfActionsException();
 		}else{
 			setActionsRemaining(actionsRemaining - amount);
+			if(actionsRemaining == 0) {
+				callAllOutOfActionsListeners();
+			}
 		}
 	}
-	public void consume(String itemName, int quantity, Inventory inventory) throws ItemNotFoundException, InsufficientQuantityException, NotConsumableException  {
+	public void consume(String itemName, int quantity, Inventory inventory) throws ItemNotFoundException, InsufficientQuantityException, NotConsumableException, OutOfActionsException  {
+		useActions(1);
 		try {
 			InventoryItem toConsume = inventory.consume(itemName, quantity);
 			switch(toConsume.getType()) {
@@ -310,5 +324,8 @@ public class CrewMember implements Serializable{
 		} catch (InsufficientQuantityException e) {
 			throw e;
 		}
+	}
+	public boolean outOfActionsToday() {
+		return actionsRemaining <= 0;
 	}
 }

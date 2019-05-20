@@ -1,6 +1,6 @@
 package main;
 
-public enum CLIContext {
+public enum CLIContext{
 	SHOULD_EXIT,
 	MAIN_MENU,
 	START_GAME,

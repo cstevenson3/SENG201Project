@@ -90,6 +90,9 @@ public class Inventory implements Serializable{
 			items.get(itemName).consume(quantity);
 			InventoryItem newItem = items.get(itemName).clone();
 			newItem.setQuantity(quantity);
+			if(items.get(itemName).getQuantity() == 0) {
+				items.remove(itemName);
+			}
 			return newItem;
 		}catch (InsufficientQuantityException e) {
 			throw e;
