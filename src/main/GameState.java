@@ -32,7 +32,7 @@ public class GameState implements Serializable{
 	
 	private Inventory inventory;
 	
-	private ArrayList<OutOfActionsListener> crewOutOfActionsListeners;
+	private transient ArrayList<OutOfActionsListener> crewOutOfActionsListeners;
 	
 	
 	public class GameStateOutOfActionsListener implements OutOfActionsListener, Serializable{
@@ -52,16 +52,23 @@ public class GameState implements Serializable{
 		
 	}
 	
+	public void initCrewMemberOutOfActionsListeners() {
+		if(crewOutOfActionsListeners == null) {
+			crewOutOfActionsListeners = new ArrayList<OutOfActionsListener>();
+		}
+		for(CrewMember member : crew.getMembers().values()) {
+			member.addOutOfActionsListener(new GameStateOutOfActionsListener());
+		}
+	}
+	
+	
 	public GameState(int daysToPlay, int piecesRequired, HashMap<String, CrewMember> crewMembers, Properties properties){
 		this.daysToPlay = Utilities.clamp(daysToPlay, 1, Integer.MAX_VALUE);
 		this.piecesRequired = Utilities.clamp(piecesRequired, 1, Integer.MAX_VALUE);
 		
 		
-		for(CrewMember member : crewMembers.values()) {
-			member.addOutOfActionsListener(new GameStateOutOfActionsListener());
-		}
 		this.crew = new Crew(crewMembers);
-		
+		initCrewMemberOutOfActionsListeners();
 		
 		this.ship = new Ship("default");
 		this.alienPirateEventOdds = Float.parseFloat(properties.getProperty("alienPirateEventOdds"));
@@ -252,7 +259,7 @@ public class GameState implements Serializable{
 		if(itemFound!=null){
 			inventory.addItem(itemFound);
 		}
-		if(itemFound.getType() == "ShipPartItem") { //TODO should have classes determine this type string
+		if(itemFound.getType() == ShipPartItem.getTypeString()) { //TODO should have classes determine this type string
 			if(getPiecesCollected() >= piecesRequired) {
 				throw new AllPartsFoundException((ShipPartItem) itemFound);
 			}
@@ -279,6 +286,9 @@ public class GameState implements Serializable{
 	}
 
 	public void addCrewOutOfActionsListener(CLIOutOfActionsListener listener) {
+		if(crewOutOfActionsListeners == null) {
+			crewOutOfActionsListeners = new ArrayList<OutOfActionsListener>();
+		}
 		crewOutOfActionsListeners.add(listener);
 	}
 }

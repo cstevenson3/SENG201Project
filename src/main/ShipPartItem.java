@@ -15,4 +15,8 @@ public class ShipPartItem extends InventoryItem{
 	public String getType() {
 		return "ShipPartItem";
 	}
+
+	public static String getTypeString() {
+		return "ShipPartItem";
+	}
 }

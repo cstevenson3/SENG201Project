@@ -199,6 +199,11 @@ public class CLI implements Serializable{
 					saveName = scanner.nextLine();
 					if(GameState.isValidSave(saveName)){
 						gameState = GameState.loadSave(saveName);
+						for(CrewMember member:gameState.getCrew().getMembers().values()) {
+							member.addOutOfActionsListener(new CLIOutOfActionsListener());
+						}
+						gameState.addCrewOutOfActionsListener(new CLIOutOfActionsListener());
+						gameState.initCrewMemberOutOfActionsListeners();
 						System.out.println("Game loaded");
 						context = CLIContext.IN_GAME;
 						break;

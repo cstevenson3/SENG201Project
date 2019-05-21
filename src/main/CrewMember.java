@@ -42,7 +42,7 @@ public class CrewMember implements Serializable{
 	private ArrayList<Disease> diseases;
 	private float diseaseOdds;
 	
-	private ArrayList<OutOfActionsListener> outOfActionsListeners;
+	private transient ArrayList<OutOfActionsListener> outOfActionsListeners;
 	
 	public CrewMember(String propertiesFile){
 		Properties properties = Utilities.loadPropertiesFile(getDirectory(propertiesFile));
@@ -78,6 +78,9 @@ public class CrewMember implements Serializable{
 	}
 	
 	public void addOutOfActionsListener(OutOfActionsListener listener) {
+		if(outOfActionsListeners == null) {
+			outOfActionsListeners = new ArrayList<OutOfActionsListener>();
+		}
 		outOfActionsListeners.add(listener);
 	}
 
@@ -138,7 +141,11 @@ public class CrewMember implements Serializable{
 	}
 
 	public String getStatus(){
-		return name + " status: health (" + getHealth() + ") - hunger (" + getHunger() + ") - tiredness (" + getTiredness() + ")";
+		String result = name + " status: health (" + getHealth() + ") - hunger (" + getHunger() + ") - tiredness (" + getTiredness() + ")";
+		for(Disease disease:diseases) {
+			result += "\n" + name + " is afflicted by " + disease.getName();
+		}
+		return result;
 	}
 
 	public int getTiredness() {
@@ -173,7 +180,7 @@ public class CrewMember implements Serializable{
 		if(actionsRemaining >= 1){
 			//check if correct role
 			if(canPilot()){
-				
+				useActions(1);
 			}else{
 				throw new InvalidCrewRoleException();
 			}
@@ -327,5 +334,8 @@ public class CrewMember implements Serializable{
 	}
 	public boolean outOfActionsToday() {
 		return actionsRemaining <= 0;
+	}
+	public void clearListeners() {
+		outOfActionsListeners = new ArrayList<OutOfActionsListener>();
 	}
 }
