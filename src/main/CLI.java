@@ -294,7 +294,7 @@ public class CLI implements Serializable{
 					}
 					break;
 				case CREW_MENU:
-					System.out.println("You are on day " + (gameState.getDaysElapsed() + 1) + " with " + gameState.getPiecesCollected() + " pieces collected.");
+					System.out.println("You are on day " + (gameState.getDaysElapsed() + 1) + " with " + gameState.getPiecesCollected() + "/" + gameState.getPiecesRequired() + " pieces collected.");
 					System.out.println("Crew/Ship Menu Options:");
 					System.out.println("1. View Crew");
 					System.out.println("2. Open pause menu");
@@ -468,6 +468,7 @@ public class CLI implements Serializable{
 						} catch (AllPartsFoundException e3) {
 							System.out.println("All parts found");
 							context = CLIContext.END_GAME;
+							break;
 						} catch (OutOfActionsException e) {
 							System.out.println("This crew member is out of actions, could not search");
 						}
@@ -540,11 +541,17 @@ public class CLI implements Serializable{
 						String planetName;
 						System.out.println("Which of these planets would you like to travel to?");
 						for(Planet planet:gameState.getPlanets().values()){
-							System.out.println(planet.getName());
+							if(!gameState.getPlanet().equals(planet.getName() )) {
+								System.out.println(planet.getName());
+							}
 						}
 						while(true){
 							planetName = scanner.nextLine();
 							if(gameState.getPlanets().containsKey(planetName)){
+								if(planetName.equals(gameState.getPlanet())) {
+									System.out.println("You are already on this planet, try a different one:");
+									continue;
+								}
 								break;
 							}else{
 								System.out.println("Could not find that planet, try again:");

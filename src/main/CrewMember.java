@@ -141,7 +141,7 @@ public class CrewMember implements Serializable{
 	}
 
 	public String getStatus(){
-		String result = name + " status: health (" + getHealth() + ") - hunger (" + getHunger() + ") - tiredness (" + getTiredness() + ")";
+		String result = name + " (" + role + ") status: health (" + getHealth() + ") - hunger (" + getHunger() + ") - tiredness (" + getTiredness() + ")";
 		for(Disease disease:diseases) {
 			result += "\n" + name + " is afflicted by " + disease.getName();
 		}

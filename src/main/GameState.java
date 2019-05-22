@@ -260,6 +260,7 @@ public class GameState implements Serializable{
 			inventory.addItem(itemFound);
 		}
 		if(itemFound.getType() == ShipPartItem.getTypeString()) { //TODO should have classes determine this type string
+			piecesCollected += itemFound.getQuantity();
 			if(getPiecesCollected() >= piecesRequired) {
 				throw new AllPartsFoundException((ShipPartItem) itemFound);
 			}
