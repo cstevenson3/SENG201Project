@@ -128,4 +128,12 @@ public class MedicalItem extends InventoryItem implements Serializable, Cloneabl
 	public String getType() {
 		return "MedicalItem";
 	}
+
+	/**
+	 * Get the type of MedicalItem
+	 * @return "MedicalItem"
+	 */
+	public static String getTypeString() {
+		return "MedicalItem";
+	}
 }

@@ -14,8 +14,8 @@ public class CrewMemberTest {
 		assertEquals(cm.getName(), "testMember");
 		
 		assertEquals(cm.getHealth(), 123);
-		assertEquals(cm.getHunger(), 123);
-		assertEquals(cm.getTiredness(), 123);
+		assertEquals(cm.getHunger(), 0);
+		assertEquals(cm.getTiredness(), 0);
 		
 		assertEquals(cm.getMaxHealth(), 123);
 		assertEquals(cm.getMaxHunger(), 123);
@@ -39,14 +39,13 @@ public class CrewMemberTest {
 			cm.useActions(2);
 		} catch (OutOfActionsException e) {
 			fail();
-			e.printStackTrace();
 		}
 		assertEquals(cm.getActionsRemaining(), 121);
 		try {
 			cm.useActions(1000);
 			fail();
 		} catch (OutOfActionsException e) {
-			e.printStackTrace();
+			
 		}
 		assertEquals(cm.getActionsRemaining(), 121);
 		
@@ -59,7 +58,7 @@ public class CrewMemberTest {
 		try {
 			cm.useActions(2);
 		} catch (OutOfActionsException e) {
-			e.printStackTrace();
+			fail();
 		}
 		cm.nextDay();
 		assertEquals(cm.getActionsRemaining(), 123);

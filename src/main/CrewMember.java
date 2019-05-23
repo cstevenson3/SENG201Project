@@ -22,7 +22,9 @@ public class CrewMember implements Serializable{
 	 * @return An ArrayList of role names
 	 */
 	public static ArrayList<String> getAllRoles() {
-		return Utilities.namesInDirectory(CREW_MEMBER_DIRECTORY);
+		ArrayList<String> roles = Utilities.namesInDirectory(CREW_MEMBER_DIRECTORY);
+		roles.remove("test");
+		return roles;
 	}
 	
 	/**
@@ -97,7 +99,7 @@ public class CrewMember implements Serializable{
 		
 		int maxHunger = Integer.parseInt(properties.getProperty("maxHunger"));
 		setMaxHunger(maxHunger);
-		setHunger(maxHunger);
+		setHunger(0);
 		
 		int maxTiredness = Integer.parseInt(properties.getProperty("maxTiredness"));
 		setMaxTiredness(maxTiredness);

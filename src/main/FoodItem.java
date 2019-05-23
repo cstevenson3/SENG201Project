@@ -97,4 +97,12 @@ public class FoodItem extends InventoryItem implements Serializable{
 	public String getType() {
 		return "FoodItem";
 	}
+	
+	/**
+	 * Get the type of FoodItem
+	 * @return "FoodItem"
+	 */
+	public static String getTypeString() {
+		return "FoodItem";
+	}
 }

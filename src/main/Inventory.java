@@ -145,12 +145,16 @@ public class Inventory implements Serializable{
 	 * @return The item consumed
 	 * @throws ItemNotFoundException if item was not found in the inventory
 	 * @throws InsufficientQuantityException if the inventory does not have enough of the item
+	 * @throws NotConsumableException if the item is not consumable
 	 */
-	public InventoryItem consume(String itemName, int quantity) throws ItemNotFoundException, InsufficientQuantityException{
+	public InventoryItem consume(String itemName, int quantity) throws ItemNotFoundException, InsufficientQuantityException, NotConsumableException{
 		if(!items.containsKey(itemName)) {
 			throw new ItemNotFoundException();
 		}
 		try{
+			if(items.get(itemName).getType() == ShipPartItem.getTypeString()) {
+				throw new NotConsumableException();
+			}
 			items.get(itemName).consume(quantity);
 			InventoryItem newItem = items.get(itemName).clone();
 			newItem.setQuantity(quantity);
@@ -161,5 +165,13 @@ public class Inventory implements Serializable{
 		}catch (InsufficientQuantityException e) {
 			throw e;
 		}
+	}
+
+	/**
+	 * Set money
+	 * @param Money
+	 */
+	public void setMoney(int money) {
+		this.money = Utilities.clamp(money, 0, Integer.MAX_VALUE);
 	}
 }
