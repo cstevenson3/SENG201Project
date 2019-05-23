@@ -16,7 +16,7 @@ public class AlienPirateEventException extends Exception {
 	 * Init
 	 * @param itemRemoved The item which was stolen
 	 */
-	AlienPirateEventException(String itemRemoved){
+	public AlienPirateEventException(String itemRemoved){
 		super();
 		this.itemRemoved = itemRemoved;
 	}

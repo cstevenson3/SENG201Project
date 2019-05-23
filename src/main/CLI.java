@@ -2,7 +2,6 @@ package main;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Scanner;
@@ -368,7 +367,7 @@ public class CLI implements Serializable{
 					}
 					break;
 				case CREW_MENU:
-					System.out.println("You are on day " + (gameState.getDaysElapsed() + 1) + " with " + gameState.getPiecesCollected() + "/" + gameState.getPiecesRequired() + " pieces collected.");
+					System.out.println("You are on day " + (gameState.getDaysElapsed() + 1) + "/" + gameState.getDaysToPlay() + " with " + gameState.getPiecesCollected() + "/" + gameState.getPiecesRequired() + " pieces collected.");
 					System.out.println("Crew/Ship Menu Options:");
 					System.out.println("1. View Crew");
 					System.out.println("2. Open pause menu");

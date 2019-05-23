@@ -9,7 +9,7 @@ public class AllPartsFoundException extends Exception {
 	/**
 	 * The last part found in case the CLI/GUI needs to know
 	 */
-	ShipPartItem lastPartFound;
+	private ShipPartItem lastPartFound;
 	
 	/**
 	 * Init
@@ -17,5 +17,13 @@ public class AllPartsFoundException extends Exception {
 	 */
 	public AllPartsFoundException(ShipPartItem lastPartFound) {
 		this.lastPartFound = lastPartFound;
+	}
+	
+	/**
+	 * Get the last ship part found
+	 * @return The last ship part found
+	 */
+	public ShipPartItem getLastPartFound() {
+		return lastPartFound;
 	}
 }
