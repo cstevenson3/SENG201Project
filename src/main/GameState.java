@@ -32,10 +32,10 @@ public class GameState implements Serializable{
 	
 	private Inventory inventory;
 	
-	private transient ArrayList<OutOfActionsListener> crewOutOfActionsListeners;
+	private transient ArrayList<CrewMemberUpdateListener> crewOutOfActionsListeners;
 	
 	
-	public class GameStateOutOfActionsListener implements OutOfActionsListener, Serializable{
+	public class GameStateOutOfActionsListener implements CrewMemberUpdateListener, Serializable{
 
 		@Override
 		public void crewOutOfActions() {
@@ -49,15 +49,25 @@ public class GameState implements Serializable{
 				callAllCrewOutOfActionsListeners();
 			}
 		}
-		
+
+		@Override
+		public void crewMemberDead(CrewMember crewMember) {
+			crew.removeMember(crewMember.getName());
+		}
+
+		@Override
+		public void crewMemberCaughtDisease(CrewMember crewMember, Disease disease) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 	public void initCrewMemberOutOfActionsListeners() {
 		if(crewOutOfActionsListeners == null) {
-			crewOutOfActionsListeners = new ArrayList<OutOfActionsListener>();
+			crewOutOfActionsListeners = new ArrayList<CrewMemberUpdateListener>();
 		}
 		for(CrewMember member : crew.getMembers().values()) {
-			member.addOutOfActionsListener(new GameStateOutOfActionsListener());
+			member.addCrewMemberUpdateListener(new GameStateOutOfActionsListener());
 		}
 	}
 	
@@ -89,11 +99,33 @@ public class GameState implements Serializable{
 		
 		spaceOutpost = (String)spaceOutposts.keySet().toArray()[0]; //the specs seem to indicate a single space outpost exists (referred to as "the nearest space outpost"), however the option to add more exists
 		
+		
+		//put ship part items on random planets
+		ArrayList<Integer> indices = new ArrayList<Integer>();
+		while(indices.size() < piecesRequired) {
+			int index = (int) Math.random() * planetNames.size();
+			index = index % planetNames.size();
+			if(indices.contains(index)) {
+				continue;
+			}
+			indices.add(index);
+		}
+		
+		int planetsAdded = 0;
 		planets = new HashMap<String, Planet>();
 		for(String planetName:planetNames){
 			Planet planet = new Planet(planetName);
+			if(indices.contains(planetsAdded)) {
+				ShipPartItem toAdd = new ShipPartItem("ShipPart");
+				toAdd.setQuantity(1);
+				toAdd.setPrice(100);
+				planet.setItem(toAdd);
+			}
 			planets.put(planetName, planet);
+			planetsAdded ++;
 		}
+
+		
 		ship.setPlanet((String)planets.keySet().toArray()[0]);
 		
 		this.daysElapsed = 0;
@@ -105,7 +137,7 @@ public class GameState implements Serializable{
 		lastViewContext = GameStateViewContext.CREW_MENU;
 		
 		
-		crewOutOfActionsListeners = new ArrayList<OutOfActionsListener>();
+		crewOutOfActionsListeners = new ArrayList<CrewMemberUpdateListener>();
 	}
 
 	public static ArrayList<String> getSavedGameNames() {
@@ -281,14 +313,14 @@ public class GameState implements Serializable{
 	}
 	
 	public void callAllCrewOutOfActionsListeners() {
-		for(OutOfActionsListener listener : crewOutOfActionsListeners) {
+		for(CrewMemberUpdateListener listener : crewOutOfActionsListeners) {
 			listener.crewOutOfActions();
 		}
 	}
 
 	public void addCrewOutOfActionsListener(CLIOutOfActionsListener listener) {
 		if(crewOutOfActionsListeners == null) {
-			crewOutOfActionsListeners = new ArrayList<OutOfActionsListener>();
+			crewOutOfActionsListeners = new ArrayList<CrewMemberUpdateListener>();
 		}
 		crewOutOfActionsListeners.add(listener);
 	}

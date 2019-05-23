@@ -40,14 +40,33 @@ public class Utilities {
 		return properties;
 	}
 	
+	/**
+	 * Clamp a float value into a range
+	 * @param value The value
+	 * @param min Minimum
+	 * @param max Maximum
+	 * @return The value clamped between minimum and maximum
+	 */
 	public static float clamp(float value, float min, float max) {
 	    return Math.max(min, Math.min(max, value));
 	}
 	
+	/**
+	 * Clamp an int value into a range
+	 * @param value The value
+	 * @param min Minimum
+	 * @param max Maximum
+	 * @return The value clamped between minimum and maximum
+	 */
 	public static int clamp(int value, int min, int max) {
 	    return Math.max(min, Math.min(max, value));
 	}
 
+	/**
+	 * Get all file names (without extension) in a directory
+	 * @param directory The directory to look in
+	 * @return An ArrayList of file names
+	 */
 	public static ArrayList<String> namesInDirectory(String directory) {
 		File folder = new File(directory);
 		File[] listOfFiles = folder.listFiles();
@@ -58,11 +77,21 @@ public class Utilities {
 		return result;
 	}
 
+	/**
+	 * Write a serializable object to file
+	 * @param directory The file location
+	 * @param object The object to write
+	 */
 	public static void writeSerializable(String directory, Serializable object) {
 		byte[] serialized = objectToBytes(object);
 		writeBytesToFile(directory, serialized);
 	}
 	
+	/**
+	 * Write a byte array to file
+	 * @param directory The file location
+	 * @param bytes The byte array to write
+	 */
 	private static void writeBytesToFile(String directory, byte[] bytes) {
 		createNecessaryDirectories(directory);
 		try {
@@ -72,6 +101,10 @@ public class Utilities {
 		}
 	}
 	
+	/**
+	 * Create any necessary parent directories for a file
+	 * @param filePath The file location
+	 */
 	public static void createNecessaryDirectories(String filePath){
 		File file = new File(filePath);
 		File directory = new File(file, "..");
@@ -80,6 +113,11 @@ public class Utilities {
 		}
 	}
 	
+	/**
+	 * Read a file into a byte array
+	 * @param directory The file location
+	 * @return The byte array
+	 */
 	private static byte[] fileToBytes(String directory){
 		try {
 			return Files.readAllBytes(new File(directory).toPath());
@@ -89,6 +127,11 @@ public class Utilities {
 		}
 	}
 	
+	/**
+	 * Convert a serializable object to a byte array
+	 * @param object The object
+	 * @return The byte array
+	 */
 	private static byte[] objectToBytes(Serializable object){
 		byte[] result = null;
 		
@@ -112,6 +155,11 @@ public class Utilities {
 		return result;
 	}
 	
+	/**
+	 * Convert a serialized byte array back to its object
+	 * @param bytes The byte array
+	 * @return The object
+	 */
 	private static Object bytesToObject(byte[] bytes){
 		if (bytes == null){
 			return null;
@@ -138,10 +186,20 @@ public class Utilities {
 		return result;
 	}
 
-	public static Object readSerializable(String saveDirectory) {
-		return bytesToObject(fileToBytes(saveDirectory));
+	/**
+	 * Read a serialized file to an object
+	 * @param directory The file location
+	 * @return The object
+	 */
+	public static Object readSerializable(String directory) {
+		return bytesToObject(fileToBytes(directory));
 	}
 
+	/**
+	 * Clone a serializable object
+	 * @param serializable The object
+	 * @return The clone
+	 */
 	public static Object clone(Serializable serializable) {
 		return bytesToObject(objectToBytes(serializable));
 	}

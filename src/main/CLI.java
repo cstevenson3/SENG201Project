@@ -7,21 +7,52 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.Scanner;
 
+/**
+ * 
+ * CLI handles the command-line interface version of this game
+ * 
+ * @author Cameron Stevenson
+ *
+ */
 public class CLI implements Serializable{
 	
+	/**
+	 * This file contains information about what game objects should be present
+	 */
 	private static final String GAME_PROPERTIES_FILE = "gameProperties.properties";
 	
+	/**
+	 * Command line input
+	 */
 	private transient Scanner scanner;
-	private CLIContext context;
+	
+	/**
+	 * The copy of the game currently being run
+	 */
 	private transient GameState gameState;
+	
+	/**
+	 * The CLI needs to know what options to present to the user, these along with
+	 * gameState.viewContext track the view state
+	 */
+	private CLIContext context;
 	private CLIContext lastContext;
 	
+	/**
+	 * init the CLI
+	 */
 	public CLI(){
 		scanner = new Scanner(System.in);
 		context = CLIContext.MAIN_MENU;
 		lastContext = CLIContext.MAIN_MENU;
 	}
 	
+	/**
+	 * Request the user input an integer within a certain range
+	 * @param min lower inclusive bound of the requested range
+	 * @param max upper inclusive bound of the requested range
+	 * @return a user-inputted integer in the requested range
+	 */
 	private int getInt(int min, int max){
 		while(true){
 			try{
@@ -37,32 +68,75 @@ public class CLI implements Serializable{
 		}
 	}
 	
+	/**
+	 * Handle the input/output involved with moving to the next day.
+	 * This was pulled out of the run function since it is used by callbacks involving
+	 * running out of actions
+	 */
 	public void handleMovingToNextDay() {
 		try {
 			gameState.moveToNextDay();
 		} catch (AlienPirateEventException e) {
-			System.out.println("Alien pirates raided the ship and took " + e.getItemRemoved());
+			if(e.getItemRemoved() == null) {
+				System.out.println("Alien pirates raided the ship and took nothing");
+			}else {
+				System.out.println("Alien pirates raided the ship and took " + e.getItemRemoved());
+			}
 		} catch (OutOfDaysException e) {
 			System.out.println("Out of days, ending game");
 			context = CLIContext.END_GAME;
 		}
 	}
 	
-	public class CLIOutOfActionsListener implements OutOfActionsListener, Serializable{
+	/**
+	 * 
+	 * This class responds to crew members or the whole crew running out of actions
+	 * and handles telling the user and any required actions
+	 * 
+	 * @author Cameron Stevenson
+	 *
+	 */
+	public class CLIOutOfActionsListener implements CrewMemberUpdateListener, Serializable{
 
+		/**
+		 * Respond to the crew running out of actions
+		 */
 		@Override
 		public void crewOutOfActions() {
 			System.out.println("All crew actions used today, moving to next day");
 			handleMovingToNextDay();
 		}
 
+		/**
+		 * Respond to a crew member running out of actions
+		 */
 		@Override
 		public void crewMemberOutOfActions(CrewMember crewMember) {
 			System.out.println("Crew member " + crewMember.getName() + " has now used up all actions today");
 		}
-		
+
+		/**
+		 * Respond to a crew member dying
+		 */
+		@Override
+		public void crewMemberDead(CrewMember crewMember) {
+			System.out.println("Crew member " + crewMember.getName() + " died");
+		}
+
+		/**
+		 * Respond to a crew member catching a disease
+		 */
+		@Override
+		public void crewMemberCaughtDisease(CrewMember crewMember, Disease disease) {
+			System.out.println("Crew member " + crewMember.getName() + " caught disease: " + disease.getName());
+		}
 	}
 	
+	/**
+	 * The bulk of the CLI is here. Inside a while loop the CLI checks the view states and 
+	 * game state, gives appropriate options to the player, deals with input, updates 
+	 * view states and game state and returns to the start of the while loop
+	 */
 	public void run(){
 		
 		Properties properties = Utilities.loadPropertiesFile(GAME_PROPERTIES_FILE);
@@ -166,7 +240,7 @@ public class CLI implements Serializable{
 								System.out.println("Adding crew member " + name + " with role " + role);
 								CrewMember crewMember = new CrewMember(role);
 								crewMember.setName(name);
-								crewMember.addOutOfActionsListener(new CLIOutOfActionsListener());
+								crewMember.addCrewMemberUpdateListener(new CLIOutOfActionsListener());
 								crewMembers.put(name, crewMember);
 								crewMembersAdded += 1;
 								break;
@@ -200,7 +274,7 @@ public class CLI implements Serializable{
 					if(GameState.isValidSave(saveName)){
 						gameState = GameState.loadSave(saveName);
 						for(CrewMember member:gameState.getCrew().getMembers().values()) {
-							member.addOutOfActionsListener(new CLIOutOfActionsListener());
+							member.addCrewMemberUpdateListener(new CLIOutOfActionsListener());
 						}
 						gameState.addCrewOutOfActionsListener(new CLIOutOfActionsListener());
 						gameState.initCrewMemberOutOfActionsListeners();
@@ -661,6 +735,11 @@ public class CLI implements Serializable{
 		//ask for days
 	}
 
+	/**
+	 * Request the user gives the name of an item which exists in the crew's inventory.
+	 * Pulled out of run due to repeated usage
+	 * @return the item name
+	 */
 	private String getValidInventoryItemName() {
 		String result = "";
 		while(true) {
@@ -673,6 +752,11 @@ public class CLI implements Serializable{
 		return result;
 	}
 
+	/**
+	 * Get the name of a crew member who has at least one action remaining.
+	 * Pulled out of run due to repeated usage
+	 * @return the name of the crew member
+	 */
 	private String getCrewMemberWithAtLeastOneActionRemaining() {
 		String result = "";
 		while(true) {

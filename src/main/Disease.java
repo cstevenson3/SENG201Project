@@ -31,6 +31,11 @@ public class Disease implements Serializable{
 		setDailyHealthDecrease(Integer.parseInt(properties.getProperty("dailyHealthDecrease")));
 	}
 	
+	/**
+	 * Get the location of a disease properties file
+	 * @param propertiesFile The name of the disease
+	 * @return The location of the properties file
+	 */
 	private static String getDirectory(String propertiesFile) {
 		return DISEASE_DIRECTORY + propertiesFile + ".properties";
 	}
@@ -73,6 +78,10 @@ public class Disease implements Serializable{
 		this.dailyHealthDecrease = dailyHealthDecrease;
 	}
 
+	/**
+	 * Get a random disease from the diseases in the directory containing them
+	 * @return A random disease
+	 */
 	public static Disease getRandomDisease() {
 		ArrayList<String> diseaseNames = Utilities.namesInDirectory(DISEASE_DIRECTORY);
 		int index = ((int)(Math.random() * 1000)) % diseaseNames.size();
