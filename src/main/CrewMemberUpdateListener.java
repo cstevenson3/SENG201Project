@@ -26,6 +26,7 @@ public interface CrewMemberUpdateListener{
 	/**
 	 * Called when a crew member catches a disease
 	 * @param crewMember The crew member
+	 * @param disease The disease caught
 	 */
 	public void crewMemberCaughtDisease(CrewMember crewMember, Disease disease);
 }

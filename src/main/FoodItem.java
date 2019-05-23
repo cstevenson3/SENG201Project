@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Properties;
 
+/**
+ * Food items reduce crew member hunger
+ * @author Cameron Stevenson
+ *
+ */
 public class FoodItem extends InventoryItem implements Serializable{
 	
 	/**

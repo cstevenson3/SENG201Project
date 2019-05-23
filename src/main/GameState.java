@@ -9,6 +9,11 @@ import java.util.Properties;
 
 import main.CLI.CLIOutOfActionsListener;
 
+/**
+ * GameState represents a single "run" or "save" of a game
+ * @author Cameron Stevenson
+ *
+ */
 public class GameState implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -331,7 +336,7 @@ public class GameState implements Serializable{
 
 	/**
 	 * Get the number of ship parts required to win the game
-	 * @return
+	 * @return The number of ship parts required to win the game
 	 */
 	public int getPiecesRequired() {
 		return piecesRequired;

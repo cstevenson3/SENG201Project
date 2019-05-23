@@ -340,6 +340,7 @@ public class CrewMember implements Serializable{
 
 	/**
 	 * Use an action to repair the ship
+	 * @param ship The ship to repair
 	 * @throws OutOfActionsException if the crew member is out of actions
 	 */
 	public void repair(Ship ship) throws OutOfActionsException {
@@ -404,7 +405,7 @@ public class CrewMember implements Serializable{
 
 	/**
 	 * Set the crew member's hunger
-	 * @param health Hunger
+	 * @param hunger Hunger
 	 */
 	public void setHunger(int hunger) {
 		this.hunger = Utilities.clamp(hunger, 0, maxHunger);

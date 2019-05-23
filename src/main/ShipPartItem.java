@@ -9,7 +9,7 @@ public class ShipPartItem extends InventoryItem{
 	
 	/**
 	 * Init ShipPartItem with the name of the part
-	 * @param name
+	 * @param name The name of the part
 	 */
 	public ShipPartItem(String name){
 		this.setName(name);

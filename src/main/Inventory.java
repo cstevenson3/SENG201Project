@@ -169,7 +169,7 @@ public class Inventory implements Serializable{
 
 	/**
 	 * Set money
-	 * @param Money
+	 * @param money What money should be
 	 */
 	public void setMoney(int money) {
 		this.money = Utilities.clamp(money, 0, Integer.MAX_VALUE);

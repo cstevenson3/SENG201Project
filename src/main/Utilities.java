@@ -18,6 +18,11 @@ import java.util.Properties;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
+/**
+ * Utilities contains utility methods such as value clamping and file serialization
+ * @author Cameron Stevenson
+ *
+ */
 public class Utilities {
 	/**
 	 * Loads a Properties object from a file

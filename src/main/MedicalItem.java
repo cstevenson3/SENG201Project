@@ -56,7 +56,7 @@ public class MedicalItem extends InventoryItem implements Serializable, Cloneabl
 	
 	/**
 	 * Checks whether this medical item cures a given disease
-	 * @param disease The name of the disease to check
+	 * @param diseaseName The name of the disease to check
 	 * @return true if this item cures this disease, false otherwise
 	 */
 	public boolean cures(String diseaseName){

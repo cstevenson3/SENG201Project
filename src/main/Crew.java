@@ -35,6 +35,7 @@ public class Crew implements Serializable{
 
 	/**
 	 * Remove a crew member from the crew
+	 * @param name The name of the crew member
 	 */
 	public void removeMember(String name) {
 		crewMembers.remove(name);

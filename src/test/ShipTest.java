@@ -1,9 +1,15 @@
-package main;
+package test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import main.CrewMember;
+import main.InvalidCrewRoleException;
+import main.OutOfActionsException;
+import main.ShieldHealthDepletedException;
+import main.Ship;
 
 public class ShipTest {
 
@@ -49,7 +55,7 @@ public class ShipTest {
 		pilot1.setActionsRemaining(0);
 		
 		try {
-			testShip.pilotToPlanet("Gentoo", pilot1, pilot2);
+			testShip.pilotToPlanet("Xandar", pilot1, pilot2);
 			fail();
 		} catch (OutOfActionsException e) {
 			

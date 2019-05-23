@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Properties;
 
+/**
+ * Diseases reduce crew member health and can be cured
+ * @author Cameron Stevenson
+ *
+ */
 public class Disease implements Serializable{
 	
 	/**
@@ -49,7 +54,8 @@ public class Disease implements Serializable{
 	}
 	
 	/**
-	 * Name of the disease
+	 * Get the name of the disease
+	 * @return The name of the disease
 	 */
 	public String getName() {
 		return name;
@@ -64,7 +70,8 @@ public class Disease implements Serializable{
 	}
 
 	/**
-	 * The amount an inflicted entity's health should decrease per day
+	 * Get the amount an inflicted entity's health should decrease per day
+	 * @return The amount an inflicted entity's health should decrease per day
 	 */
 	public int getDailyHealthDecrease() {
 		return dailyHealthDecrease;
