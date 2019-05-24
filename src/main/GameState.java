@@ -134,7 +134,7 @@ public class GameState implements Serializable{
 	 * @return The file location
 	 */
 	public static String getSaveDirectory(String saveName){
-		return SAVE_DIRECTORY + saveName + ".ser";
+		return SAVE_DIRECTORY + saveName + SAVE_EXTENSION;
 	}
 	/**
 	 * Check if a save name has an existing save
@@ -202,7 +202,7 @@ public class GameState implements Serializable{
 		//put ship part items on random planets
 		ArrayList<Integer> indices = new ArrayList<Integer>();
 		while(indices.size() < piecesRequired) {
-			int index = (int) Math.random() * planetNames.size();
+			int index = (int) (Math.random() * planetNames.size());
 			index = index % planetNames.size();
 			if(indices.contains(index)) {
 				continue;

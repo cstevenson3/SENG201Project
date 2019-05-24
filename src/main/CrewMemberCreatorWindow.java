@@ -189,7 +189,7 @@ public class CrewMemberCreatorWindow {
 			CrewMember rolePlaceholder = new CrewMember(role);
 			txtpnRoleDescriptions.setText(txtpnRoleDescriptions.getText() + "\n" + "\n" + rolePlaceholder.getRoleDescription());
 		}
-		txtpnRoleDescriptions.setMaximumSize(new Dimension(400,200));
+		txtpnRoleDescriptions.setMaximumSize(new Dimension(400,1000));
 		panelRoleDescriptions.add(txtpnRoleDescriptions);
 		frame.getContentPane().add(glue_1);
 	}

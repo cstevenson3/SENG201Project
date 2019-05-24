@@ -111,6 +111,7 @@ public class GUI {
 	 * makes a GameState to initialize the game.
 	 */
 	public void makeGameState() {
+		
 		gameState = new GameState(numberOfDays, piecesRequired, crewMembers, properties);
 		gameState.setShipName(shipName);
 	}
