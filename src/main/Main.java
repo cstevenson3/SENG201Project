@@ -22,7 +22,7 @@ public class Main {
 		boolean useGUI = Boolean.parseBoolean(properties.getProperty("useGUI"));
 		
 		if(useGUI) {
-			System.out.println("GUI not implemented");
+			GUI gui = new GUI();
 		}else {
 			CLI cli = new CLI();
 			cli.run();

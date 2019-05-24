@@ -209,7 +209,7 @@ public class GUI {
 	}
 	
 	
-	public class GUIOutOfActionsListener implements OutOfActionsListener, Serializable{
+	public class GUIOutOfActionsListener implements CrewMemberUpdateListener, Serializable{
 
 		@Override
 		public void crewOutOfActions() {
@@ -220,6 +220,16 @@ public class GUI {
 		@Override
 		public void crewMemberOutOfActions(CrewMember crewMember) {
 			System.out.println("Crew member " + crewMember.getName() + " has now used up all actions today");
+		}
+
+		@Override
+		public void crewMemberDead(CrewMember crewMember) {
+			
+		}
+
+		@Override
+		public void crewMemberCaughtDisease(CrewMember crewMember, Disease disease) {
+			
 		}
 		
 	}
