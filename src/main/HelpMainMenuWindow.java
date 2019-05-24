@@ -66,7 +66,7 @@ public class HelpMainMenuWindow {
 		JButton btnBack = new JButton("Back");
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (gameState.getViewContext() == GameStateViewContext.PAUSE_MENU) {
+				if (gameState != null && gameState.getViewContext() != null && gameState.getViewContext() == GameStateViewContext.PAUSE_MENU) {
 					guiObject.setGUIContext(GUIContext.IN_GAME);
 					finishedWindow();
 				} else {
@@ -79,7 +79,7 @@ public class HelpMainMenuWindow {
 		JLabel lblHelpContent = new JLabel();
 		lblHelpContent.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblHelpContent.setAlignmentX(Component.CENTER_ALIGNMENT);
-		if (gameState.getViewContext() == GameStateViewContext.PAUSE_MENU) {
+		if (gameState != null && gameState.getViewContext() != null && gameState.getViewContext() == GameStateViewContext.PAUSE_MENU) {
 			lblHelpContent.setText("This is the Help for the game! Press the button to return to the pause menu.");
 		} else {
 			lblHelpContent.setText("This is the Help for the main menu! Press the button to return to the main menu.");
