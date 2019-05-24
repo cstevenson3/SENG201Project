@@ -18,6 +18,11 @@ import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.JTextField;
 
+/**
+ * The consume menu window
+ * @author Teren Gubb
+ *
+ */
 public class ConsumeMenuWindow {
 
 	private JFrame frame;
@@ -31,7 +36,7 @@ public class ConsumeMenuWindow {
 
 	/**
 	 * creates the ConsumeMenuWindow.
-	 * @param incomingGui
+	 * @param incomingGui The gui object
 	 */
 	public ConsumeMenuWindow(GUI incomingGui) {
 		guiObject = incomingGui;

@@ -78,7 +78,7 @@ public class GUI {
 	
 	/**
 	 * Takes a String and sets the private variable shipName to it.
-	 * @param incomingShipName 
+	 * @param incomingShipName The ship name
 	 */
 	public void setShipName(String incomingShipName) {
 		shipName = incomingShipName;
@@ -86,7 +86,7 @@ public class GUI {
 	
 	/**
 	 * Takes an Integer and sets the private variable piecesRequired to it.
-	 * @param incomingPiecesRequired
+	 * @param incomingPiecesRequired The ship parts required to win
 	 */
 	public void setPiecesRequired(int incomingPiecesRequired) {
 		piecesRequired = incomingPiecesRequired;
@@ -178,7 +178,7 @@ public class GUI {
 	
 	/**
 	 * takes a Crew Member name and returns a boolean of whether it resides in the crew member ArrayList. 
-	 * @param incomingName
+	 * @param incomingName The potential crew member name
 	 * @return boolean for if the name exists or not.
 	 */
 	public boolean containsCrewMember(String incomingName) {
@@ -187,8 +187,8 @@ public class GUI {
 	
 	/**
 	 * adds an incomingName and incomingCrewMember object to the crewMembers ArrayList.
-	 * @param incomingName
-	 * @param incomingCrewMember
+	 * @param incomingName The crew member's name
+	 * @param incomingCrewMember The crew member
 	 */
 	public void addCrewMember(String incomingName, CrewMember incomingCrewMember) {
 		crewMembers.put(incomingName, incomingCrewMember);
@@ -296,7 +296,7 @@ public class GUI {
 	
 	/**
 	 * hands control back to the GUI, and closes the MainMenuWindow.
-	 * @param mainMenu
+	 * @param mainMenu The main menu window
 	 */
 	public void closeMainMenuWindow(MainMenuWindow mainMenu) {
 		mainMenu.closeWindow();
@@ -312,7 +312,7 @@ public class GUI {
 	
 	/**
 	 * hands control back to the GUI, and closes the HelpMainMenuWindow.
-	 * @param helpMainMenu
+	 * @param helpMainMenu The main menu help window
 	 */
 	public void closeHelpMainMenuWindow(HelpMainMenuWindow helpMainMenu) {
 		helpMainMenu.closeWindow();
@@ -328,7 +328,7 @@ public class GUI {
 	
 	/**
 	 * hands control back to the GUI, and closes the LoadGameWindow.
-	 * @param loadGame
+	 * @param loadGame The load game window
 	 */
 	public void closeLoadGameWindow(LoadGameWindow loadGame) {
 		loadGame.closeWindow();
@@ -344,7 +344,7 @@ public class GUI {
 	
 	 /**
 	  * hands control back to the GUI, and closes the StartGameWindow.
-	  * @param startGame
+	  * @param startGame The start game window
 	  */
 	public void closeStartGameWindow(StartGameWindow startGame) {
 		startGame.closeWindow();
@@ -360,7 +360,7 @@ public class GUI {
 	
 	/**
 	 * hands control back to the GUI, and closes the CrewMemberCreatorWindow.
-	 * @param crewMemberCreator
+	 * @param crewMemberCreator The crew member creation window
 	 */
 	public void closeCrewMemberCreatorWindow(CrewMemberCreatorWindow crewMemberCreator) {
 		crewMemberCreator.closeWindow();
@@ -376,7 +376,7 @@ public class GUI {
 	
 	/**
 	 * hands control back to the GUI, and closes the EndGameWindow.
-	 * @param endGame
+	 * @param endGame The end game window
 	 */
 	public void closeEndGameWindow(EndGameWindow endGame) {
 		endGame.closeWindow();
@@ -392,7 +392,7 @@ public class GUI {
 	
 	/**
 	 * hands control back to the GUI, and closes the CrewMenuWindow.
-	 * @param crewMenu
+	 * @param crewMenu The crew menu window
 	 */
 	public void closeCrewMenuWindow(CrewMenuWindow crewMenu) {
 		crewMenu.closeWindow();
@@ -408,7 +408,7 @@ public class GUI {
 	
 	/**
 	 * hands control back to the GUI, and closes the ConsumeMenuWindow.
-	 * @param consumeMenu
+	 * @param consumeMenu The consume menu window
 	 */
 	public void closeConsumeMenuWindow(ConsumeMenuWindow consumeMenu) {
 		consumeMenu.closeWindow();
@@ -424,7 +424,7 @@ public class GUI {
 	
 	/**
 	 * hands control back to the GUI, and closes the PauseMenuWindow.
-	 * @param pauseMenu
+	 * @param pauseMenu The pause menu window
 	 */
 	public void closePauseMenuWindow(PauseMenuWindow pauseMenu) {
 		pauseMenu.closeWindow();
@@ -440,7 +440,7 @@ public class GUI {
 	
 	 /**
 	  * hands control back to the GUI, and closes the SpaceOutpostMenuWindow.
-	  * @param spaceOutpostMenu
+	  * @param spaceOutpostMenu The space outpost menu window
 	  */
 	public void closeSpaceOutpostMenuWindow(SpaceOutpostMenuWindow spaceOutpostMenu) {
 		spaceOutpostMenu.closeWindow();
@@ -456,7 +456,7 @@ public class GUI {
 	
 	/**
 	 * hands control back to the GUI, and closes the PlanetMenuWindow.
-	 * @param planetMenu
+	 * @param planetMenu The planet menu window
 	 */
 	public void closePlanetMenuWindow(PlanetMenuWindow planetMenu) {
 		planetMenu.closeWindow();
@@ -465,7 +465,7 @@ public class GUI {
 	
 	/**
 	 * closes the SaveGameWindow, and renders the game.
-	 * @param saveGame
+	 * @param saveGame The save game window
 	 */
 	public void closeSaveGameWindow(SaveGameWindow saveGame) {
 		saveGame.closeWindow();

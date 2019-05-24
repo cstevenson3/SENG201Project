@@ -17,6 +17,12 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+
+/**
+ * The save-game menu window
+ * @author Teren Gubb
+ *
+ */
 public class SaveGameWindow {
 
 	private JFrame frame;
@@ -26,7 +32,7 @@ public class SaveGameWindow {
 
 	/**
 	 * Create the SaveGameWindow.
-	 * @param guiObject 
+	 * @param incomingGui The gui object
 	 */
 	public SaveGameWindow(GUI incomingGui) {
 		guiObject = incomingGui;

@@ -15,6 +15,11 @@ import java.awt.Component;
 import javax.swing.Box;
 import java.awt.Dimension;
 
+/**
+ * The end game window
+ * @author Teren Gubb
+ *
+ */
 public class EndGameWindow {
 
 	private JFrame frame;
@@ -23,7 +28,7 @@ public class EndGameWindow {
 	
 	/**
 	 * creates the EndGameWindow.
-	 * @param incomingGUI
+	 * @param incomingGUI The gui object
 	 */
 	public EndGameWindow(GUI incomingGUI) {
 		guiObject = incomingGUI;

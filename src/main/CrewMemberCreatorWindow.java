@@ -22,6 +22,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.UIManager;
 
+/**
+ * The crew member creation window
+ * @author Teren Gubb
+ *
+ */
 public class CrewMemberCreatorWindow {
 
 	private JFrame frame;
@@ -33,7 +38,7 @@ public class CrewMemberCreatorWindow {
 
 	/**
 	 * Creates the CrewMemberCreator Window.
-	 * @param incomingGUI
+	 * @param incomingGUI The gui object
 	 */
 	public CrewMemberCreatorWindow(GUI incomingGUI) {
 		guiObject = incomingGUI;

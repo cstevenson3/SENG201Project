@@ -12,6 +12,11 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * The main menu help window
+ * @author Teren Gubb
+ *
+ */
 public class HelpMainMenuWindow {
 
 	private JFrame frame;
@@ -20,7 +25,7 @@ public class HelpMainMenuWindow {
 
 	/**
 	 * creates the Help Window.
-	 * @param incomingGUI
+	 * @param incomingGUI The gui object
 	 */
 	public HelpMainMenuWindow(GUI incomingGUI) {
 		guiObject = incomingGUI;

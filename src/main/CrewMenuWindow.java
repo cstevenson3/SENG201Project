@@ -22,6 +22,11 @@ import java.awt.FlowLayout;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
+/**
+ * The crew menu window
+ * @author Teren Gubb
+ *
+ */
 public class CrewMenuWindow {
 
 	private JFrame frame;
@@ -32,7 +37,7 @@ public class CrewMenuWindow {
 	
 	/**
 	 * Creates the CrewMenuWindow
-	 * @param incomingGui 
+	 * @param incomingGui The gui object
 	 */
 	public CrewMenuWindow(GUI incomingGui) {
 		guiObject = incomingGui;

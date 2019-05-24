@@ -15,6 +15,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Properties;
 
+
+/**
+ * The main menu window
+ * @author Teren Gubb
+ *
+ */
 public class MainMenuWindow {
 
 	private JFrame frame;
@@ -23,6 +29,7 @@ public class MainMenuWindow {
 	
 	/**
 	 * Create the MainMenu Window.
+	 * @param incomingGUI The gui object
 	 */
 	public MainMenuWindow(GUI incomingGUI) {
 		guiObject = incomingGUI;

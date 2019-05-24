@@ -17,6 +17,12 @@ import javax.swing.Box;
 import java.awt.Dimension;
 import javax.swing.JTextField;
 
+
+/**
+ * The planet menu window
+ * @author Teren Gubb
+ *
+ */
 public class PlanetMenuWindow {
 
 	private JFrame frame;
@@ -31,7 +37,7 @@ public class PlanetMenuWindow {
 
 	/**
 	 * Creates the PlanetMenuWindow
-	 * @param incomingGui 
+	 * @param incomingGui The gui object
 	 */
 	public PlanetMenuWindow(GUI incomingGui) {
 		guiObject = incomingGui;
@@ -43,7 +49,7 @@ public class PlanetMenuWindow {
 	
 	/**
 	 * creates an ArrayList for valid pilots.
-	 * @return
+	 * @return An ArrayList of the names of valid pilots
 	 */
 	public ArrayList<String> createValidPilots() {
 		ArrayList<String> localValidPilots = new ArrayList<String>();

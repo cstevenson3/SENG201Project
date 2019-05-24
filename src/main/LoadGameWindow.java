@@ -14,6 +14,12 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
+
+/**
+ * The save-game loader window
+ * @author Teren Gubb
+ *
+ */
 public class LoadGameWindow {
 
 	private JFrame frame;
@@ -21,7 +27,7 @@ public class LoadGameWindow {
 
 	/**
 	 * creates the LoadGameWindow.
-	 * @param incomingGUI
+	 * @param incomingGUI The gui object
 	 */
 	public LoadGameWindow(GUI incomingGUI) {
 		guiObject = incomingGUI;

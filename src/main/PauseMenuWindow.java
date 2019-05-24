@@ -15,6 +15,12 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+
+/**
+ * The pause menu window
+ * @author Teren Gubb
+ *
+ */
 public class PauseMenuWindow {
 
 	private JFrame frame;
@@ -23,7 +29,7 @@ public class PauseMenuWindow {
 	
 	/**
 	 * Create the PauseMenuWindow.
-	 * @param incomingGui 
+	 * @param incomingGui The gui object
 	 */
 	public PauseMenuWindow(GUI incomingGui) {
 		guiObject = incomingGui;

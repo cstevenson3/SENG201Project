@@ -19,6 +19,12 @@ import javax.swing.UIManager;
 import javax.swing.JTextField;
 import javax.swing.JFormattedTextField;
 
+
+/**
+ * The space outpost menu window
+ * @author Teren Gubb
+ *
+ */
 public class SpaceOutpostMenuWindow {
 
 	private JFrame frame;
@@ -32,7 +38,7 @@ public class SpaceOutpostMenuWindow {
 
 	/**
 	 * Create the SpaceOutpostMenuWindow.
-	 * @param incomingGui 
+	 * @param incomingGui The gui object
 	 */
 	public SpaceOutpostMenuWindow(GUI incomingGui) {
 		guiObject = incomingGui;
@@ -285,6 +291,7 @@ public class SpaceOutpostMenuWindow {
 				}else{
 					lblPurchaseWarn.setText("Item purchase failed, insufficient funds");
 				}
+				panelPurchaseConfirm.setVisible(false);
 			}
 		});
 		btnYes.setFont(new Font("Tahoma", Font.PLAIN, 16));

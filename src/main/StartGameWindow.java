@@ -21,6 +21,11 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JTextField;
 
+/**
+ * The start-game menu window
+ * @author Teren Gubb
+ *
+ */
 public class StartGameWindow {
 
 	private JFrame frame;
@@ -37,6 +42,7 @@ public class StartGameWindow {
 
 	/**
 	 * Create the Start Window.
+	 * @param incomingGUI The gui object
 	 */
 	public StartGameWindow(GUI incomingGUI) {
 		guiObject = incomingGUI;
